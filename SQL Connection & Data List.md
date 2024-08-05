@@ -48,6 +48,10 @@ Go to Controller and make Configuration variable and set it using constructor
 
 ## Step 4
 
+install `System.Data.SqlClient` from Nuget Package Manager
+
+## Step 4
+
 In List Page Action Method Write Logic to Fetch Data:
 
 ```csharp
