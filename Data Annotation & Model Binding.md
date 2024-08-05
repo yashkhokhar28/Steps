@@ -23,10 +23,10 @@ Add `asp-validation-summary` above all the text field and set it to model only t
 Add `asp-validation-for` to each TextField / DropDown to show particular property’s error message
 
 ## Step 7
-Add section Scripts in add-edit page
+Add RenderPartialAsync section Script in add-edit page
 
 ## Step 8
-Add render section in `_Layout.cshtml` (for optionally allow script)
+Add RenderSectionAsync in `_Layout.cshtml` (for optionally allow script)
 
 ## Step 9
 In controller create one action method to apply server side validation
