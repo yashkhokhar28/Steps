@@ -50,7 +50,7 @@ Go to Controller and make Configuration variable and set it using constructor
 
 install `System.Data.SqlClient` from Nuget Package Manager
 
-## Step 4
+## Step 5
 
 In List Page Action Method Write Logic to Fetch Data:
 
@@ -67,6 +67,6 @@ table.Load(reader);
 return View(table);
 ```
 
-## Step 5
+## Step 6
 
 In View Page import Data Table and use `foreach` loop (iterate through data table) and display the data
