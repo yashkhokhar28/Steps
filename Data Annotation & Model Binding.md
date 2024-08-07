@@ -6,7 +6,7 @@ Here's the updated guideline for Data Annotation & Model Binding with the added 
 **Prerequisite**: Add-Edit Page, Model, lib folder, script (tinyurl.com/libfolder)
 
 ## Step 1
-Add the following scripts to your page:
+Add the following scripts to _Layout.cshtml page below your main JavaScript File:
 
 ```html
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
