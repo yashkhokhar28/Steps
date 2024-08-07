@@ -1,6 +1,6 @@
-# Pre-Requisite
+# SQL Connection & Data List
 
-SQL Server Installation, SelectAll Procedure
+**Prerequisite**: SQL Server Installation, SelectAll Procedure
 
 ## Step 1
 
