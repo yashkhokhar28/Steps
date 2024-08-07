@@ -45,6 +45,14 @@ Add Connection String in `appsettings.json` file
 ## Step 3
 
 Go to Controller and make Configuration variable and set it using constructor
+```js
+private IConfiguration configuration;
+
+        public ProductController(IConfiguration _configuration)
+        {
+            configuration = _configuration;
+        }
+```
 
 ## Step 4
 
