@@ -1,35 +1,44 @@
 
+Here's the updated guideline for Data Annotation & Model Binding with the added scripts and the first step clarified:
+
 # Data Annotation & Model Binding
 
 **Prerequisite**: Add-Edit Page, Model, lib folder, script (tinyurl.com/libfolder)
 
 ## Step 1
-Add Appropriate Data Annotation in Model With Error Message
+Add the following scripts to your page:
+
+```html
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+```
 
 ## Step 2
-Import Model in Product Add Edit Page
+Add Appropriate Data Annotation in Model With Error Message
 
 ## Step 3
-Apply Model Binding in Each TextField / DropDown Using `asp-for` tag helper
+Import Model in Product Add Edit Page
 
 ## Step 4
-Add Hidden Field (Primary Key)
+Apply Model Binding in Each TextField / DropDown Using `asp-for` tag helper
 
 ## Step 5
-Add `asp-validation-summary` above all the text field and set it to model only to show proper error message of model 
-(use case is to show all the error messages at one place)
+Add Hidden Field (Primary Key)
 
 ## Step 6
-Add `asp-validation-for` to each TextField / DropDown to show particular property’s error message
+Add `asp-validation-summary` above all the text fields and set it to model only to show proper error messages of the model (use case is to show all the error messages in one place)
 
 ## Step 7
-Add RenderPartialAsync section Script in add-edit page
+Add `asp-validation-for` to each TextField / DropDown to show the particular property’s error message
 
 ## Step 8
-Add RenderSectionAsync in `_Layout.cshtml` (for optionally allow script)
+Add RenderPartialAsync section Script in the add-edit page
 
 ## Step 9
-In controller create one action method to apply server side validation
+Add RenderSectionAsync in `_Layout.cshtml` (for optionally allowing scripts)
 
 ## Step 10
-Check server side and client side validation
+In the controller, create one action method to apply server-side validation
+
+## Step 11
+Check server-side and client-side validation
