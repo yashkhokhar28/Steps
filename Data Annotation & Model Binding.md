@@ -23,13 +23,13 @@ Import Model in Product Add Edit Page
 Apply Model Binding in Each TextField / DropDown Using `asp-for` tag helper
 
 **Example :**
-```
+```html
 <input type="text" class="form-control" asp-for="ProductName" placeholder="Enter Product Name"/>
 ```
 
 ## Step 5
 Add Hidden Field (Primary Key)
-```
+```html
 @Html.HiddenFor(x => x.ProductID)
 ```
 
@@ -37,7 +37,7 @@ Add Hidden Field (Primary Key)
 Add `asp-validation-summary` above all the text fields and set it to model only to show proper error messages of the model (use case is to show all the error messages in one place)
 
 **Example :**
-```
+```html
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 ``` 
 
@@ -45,13 +45,13 @@ Add `asp-validation-summary` above all the text fields and set it to model only 
 Add `asp-validation-for` to each TextField / DropDown to show the particular property’s error message
 
 **Example :**
-```
+```html
 <span asp-validation-for="ProductPrice" class="text-danger"></span>
 ``` 
 
 ## Step 8
 Add RenderPartialAsync section Script in the add-edit page
-```html
+```js
 @section Scripts{  
  @{  await Html.RenderPartialAsync("_ValidationScriptsPartial");  
   }  
@@ -60,7 +60,7 @@ Add RenderPartialAsync section Script in the add-edit page
 
 ## Step 9
 Add RenderSectionAsync in `_Layout.cshtml` (for optionally allowing scripts)
-```
+```js
 @await RenderSectionAsync("Scripts", required: false)
 ```
 
