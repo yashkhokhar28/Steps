@@ -35,6 +35,7 @@ Add Hidden Field (Primary Key)
 
 ## Step 6
 Add `asp-validation-summary` above all the text fields and set it to model only to show proper error messages of the model (use case is to show all the error messages in one place)
+
 **Example :**
 ```
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -42,6 +43,7 @@ Add `asp-validation-summary` above all the text fields and set it to model only 
 
 ## Step 7
 Add `asp-validation-for` to each TextField / DropDown to show the particular property’s error message
+
 **Example :**
 ```
 <span asp-validation-for="ProductPrice" class="text-danger"></span>
