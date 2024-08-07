@@ -21,7 +21,7 @@ Import Model in Product Add Edit Page
 
 ## Step 4
 Apply Model Binding in Each TextField / DropDown Using `asp-for` tag helper
-**Example : **
+**Example :**
 ```
 <input type="text" class="form-control" asp-for="ProductName" placeholder="Enter Product Name"/>
 ```
