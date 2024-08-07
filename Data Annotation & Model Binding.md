@@ -1,6 +1,3 @@
-
-Here's the updated guideline for Data Annotation & Model Binding with the added scripts and the first step clarified:
-
 # Data Annotation & Model Binding
 
 **Prerequisite**: Add-Edit Page, Model, lib folder, script (tinyurl.com/libfolder)
