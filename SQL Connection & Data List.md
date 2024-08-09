@@ -57,7 +57,9 @@ private IConfiguration configuration;
 ## Step 4
 
 install `System.Data.SqlClient` from Nuget Package Manager
+
 Tools -> NuGet Package Manager -> Manage NuGet Packages For Solution
+
 (Project Should Be Not In a Running Mode)
 
 ## Step 5
