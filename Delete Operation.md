@@ -1,6 +1,21 @@
+
 # Delete a Data
 
 **Prerequisite**: Delete Procedure
+
+**Delete Procedure**
+```sql
+CREATE  PROCEDURE [dbo].[PR_Product_Delete]
+@ProductID INT
+AS
+BEGIN
+DELETE
+FROM
+[dbo].[Product]
+WHERE
+[dbo].[Product].[ProductID] = @ProductID
+END
+```
 
 ## Step 1
 
