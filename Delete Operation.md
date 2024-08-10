@@ -22,13 +22,13 @@ END
 Add a ProductDelete Action method in Controller
 
 ```csharp
-string connectionString = this.Configuration.GetConnectionString("ConnectionString");
+string connectionString = this.configuration.GetConnectionString("ConnectionString");
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
             SqlCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "PR_Product_DeleteByPK";
-            command.Parameters.AddWithValue("@ProductID", CountryID);
+            command.CommandText = "PR_Product_Delete";
+            command.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
             command.ExecuteNonQuery();
             return RedirectToAction("ProductList");
 ```
