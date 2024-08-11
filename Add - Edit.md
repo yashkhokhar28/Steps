@@ -81,42 +81,40 @@ END
 
 ```csharp
 public IActionResult ProductSave(ProductModel productModel)
-{
-    if (ModelState.IsValid)
-    {
-        string connectionString = this.configuration.GetConnectionString("ConnectionString");
-        using (SqlConnection connection = new SqlConnection(connectionString))
         {
+            string connectionString = this.configuration.GetConnectionString("ConnectionString");
+            SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
-            using (SqlCommand command = connection.CreateCommand())
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            if (ModelState.IsValid)
             {
-                command.CommandType = CommandType.StoredProcedure;
-
                 if (productModel.ProductID == null)
                 {
                     command.CommandText = "PR_Product_Insert";
+                    command.Parameters.Add("@ProductName", SqlDbType.VarChar).Value = productModel.ProductName;
+                    command.Parameters.Add("@ProductCode", SqlDbType.VarChar).Value = productModel.ProductCode;
+                    command.Parameters.Add("@ProductPrice", SqlDbType.Decimal).Value = productModel.ProductPrice;
+                    command.Parameters.Add("@Description", SqlDbType.VarChar).Value = productModel.Description;
+                    command.Parameters.Add("@UserID", SqlDbType.Int).Value = productModel.UserID;
                 }
                 else
                 {
                     command.CommandText = "PR_Product_Update";
                     command.Parameters.Add("@ProductID", SqlDbType.Int).Value = productModel.ProductID;
+                    command.Parameters.Add("@ProductName", SqlDbType.VarChar).Value = productModel.ProductName;
+                    command.Parameters.Add("@ProductCode", SqlDbType.VarChar).Value = productModel.ProductCode;
+                    command.Parameters.Add("@ProductPrice", SqlDbType.Decimal).Value = productModel.ProductPrice;
+                    command.Parameters.Add("@Description", SqlDbType.VarChar).Value = productModel.Description;
+                    command.Parameters.Add("@UserID", SqlDbType.Int).Value = productModel.UserID;
                 }
 
-                command.Parameters.Add("@ProductName", SqlDbType.VarChar).Value = productModel.ProductName;
-                command.Parameters.Add("@ProductCode", SqlDbType.VarChar).Value = productModel.ProductCode;
-                command.Parameters.Add("@ProductPrice", SqlDbType.Decimal).Value = productModel.ProductPrice;
-                command.Parameters.Add("@Description", SqlDbType.VarChar).Value = productModel.Description;
-                command.Parameters.Add("@UserID", SqlDbType.Int).Value = productModel.UserID;
-
                 command.ExecuteNonQuery();
+                return View("ProductList");
             }
+
+            return View("ProductAddEdit", productModel);
         }
-
-        return RedirectToAction("ProductList");
-    }
-
-    return View("ProductAddEdit", productModel);
-}
 ```
 
 ## Step 2: Verify Insert Operation
