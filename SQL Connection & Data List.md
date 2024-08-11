@@ -1,16 +1,35 @@
-# SQL Connection & Data List
+# Establishing SQL Connection & Displaying Data in ASP.NET Core MVC
 
-**Prerequisite**: SQL Server Installation, SelectAll Procedure
+**Prerequisite**: Ensure SQL Server is installed and the `SelectAll` stored procedure is created.
 
-## Step 1
+```sql
+CREATE PROCEDURE [dbo].[PR_Product_SelectAll]
+AS
+BEGIN
+    SELECT 
+        [dbo].[Product].[ProductID],
+        [dbo].[Product].[ProductName],
+        [dbo].[Product].[ProductPrice],
+        [dbo].[Product].[ProductCode],
+        [dbo].[Product].[Description],
+        [dbo].[Product].[UserID],
+        [dbo].[User].[UserName]
+    FROM
+        [dbo].[Product]
+    INNER JOIN
+        [dbo].[User] ON [dbo].[Product].[UserID] = [dbo].[User].[UserID]
+END
+```
 
-Add Static Data in SQL Server [here](https://codeshare.io/ar)
+## Step 1: Add Static Data to SQL Server
 
-## Step 2
+Insert static data into your SQL Server database using the provided script [here](https://codeshare.io/ar).
 
-Add Connection String in `appsettings.json` file
+## Step 2: Configure the Connection String in `appsettings.json`
 
 ### For Windows Users:
+
+Add the connection string for your SQL Server database in the `appsettings.json` file as shown below:
 
 ```json
 "ConnectionStrings": {
@@ -28,9 +47,11 @@ Add Connection String in `appsettings.json` file
 
 ### For Mac Users:
 
+For Mac users, the connection string should include the user ID and password:
+
 ```json
 "ConnectionStrings": {
-    "ConnectionString": "Data Source=SQL Server Name;Initial Catalog=DatabaseName;User id=userID ; password=Password;"
+    "ConnectionString": "Data Source=SQL Server Name;Initial Catalog=DatabaseName;User id=userID; password=Password;"
 }
 ```
 
@@ -38,33 +59,33 @@ Add Connection String in `appsettings.json` file
 
 ```json
 "ConnectionStrings": {
-    "ConnectionString": "Data Source=localhost;Initial Catalog=Practice;User id=SA ; password=MyStrongPass123;"
+    "ConnectionString": "Data Source=localhost;Initial Catalog=Practice;User id=SA; password=MyStrongPass123;"
 }
 ```
 
-## Step 3
+## Step 3: Set Up the Configuration Variable in the Controller
 
-Go to Controller and make Configuration variable and set it using constructor
-```js
+In your controller, declare a configuration variable and initialize it using the constructor. This will allow you to access the connection string from the configuration.
+
+```csharp
 private IConfiguration configuration;
 
-        public ProductController(IConfiguration _configuration)
-        {
-            configuration = _configuration;
-        }
+public ProductController(IConfiguration _configuration)
+{
+    configuration = _configuration;
+}
 ```
 
-## Step 4
+## Step 4: Install the `System.Data.SqlClient` Package
 
-install `System.Data.SqlClient` from Nuget Package Manager
+Install the `System.Data.SqlClient` package from the NuGet Package Manager to enable SQL Server connectivity.
 
-Tools -> NuGet Package Manager -> Manage NuGet Packages For Solution
+- Navigate to **Tools** -> **NuGet Package Manager** -> **Manage NuGet Packages for Solution**.
+- Ensure the project is not running during the installation.
 
-(Project Should Be Not In a Running Mode)
+## Step 5: Write Logic to Fetch Data in the List Page Action Method
 
-## Step 5
-
-In List Page Action Method Write Logic to Fetch Data:
+In the action method for your list page, add the following logic to fetch data from the SQL Server database:
 
 ```csharp
 string connectionString = this.Configuration.GetConnectionString("ConnectionString");
@@ -72,13 +93,44 @@ SqlConnection connection = new SqlConnection(connectionString);
 connection.Open();
 SqlCommand command = connection.CreateCommand();
 command.CommandType = CommandType.StoredProcedure;
-command.CommandText = "PR_Country_SelectAll";
+command.CommandText = "PR_Product_SelectAll";
 SqlDataReader reader = command.ExecuteReader();
 DataTable table = new DataTable();
 table.Load(reader);
 return View(table);
 ```
 
-## Step 6
+## Step 6: Display the Data in the View
 
-In View Page import Data Table and use `foreach` loop (iterate through data table) and display the data
+In your view page, import the `DataTable` and use a `foreach` loop to iterate through the data and display it:
+
+```csharp
+@model DataTable
+@using System.Data
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ProductID</th>
+            <th>ProductName</th>
+            <th>ProductPrice</th>
+            <th>ProductCode</th>
+            <th>Description</th>
+            <th>UserName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in Model.Rows)
+        {
+            <tr>
+                <td>@row["ProductID"]</td>
+                <td>@row["ProductName"]</td>
+                <td>@row["ProductPrice"]</td>
+                <td>@row["ProductCode"]</td>
+                <td>@row["Description"]</td>
+                <td>@row["UserName"]</td>
+            </tr>
+        }
+    </tbody>
+</table>
+```
