@@ -82,13 +82,18 @@ END
 ```csharp
 public IActionResult ProductSave(ProductModel productModel)
         {
-            string connectionString = this.configuration.GetConnectionString("ConnectionString");
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            SqlCommand command = connection.CreateCommand();
-            command.CommandType = CommandType.StoredProcedure;
+            if (productModel.UserID <= 0)
+            {
+                ModelState.AddModelError("UserID", "A valid User is required.");
+            }
+
             if (ModelState.IsValid)
             {
+                string connectionString = this.configuration.GetConnectionString("ConnectionString");
+                SqlConnection connection = new SqlConnection(connectionString);
+                connection.Open();
+                SqlCommand command = connection.CreateCommand();
+                command.CommandType = CommandType.StoredProcedure;
                 if (productModel.ProductID == null)
                 {
                     command.CommandText = "PR_Product_Insert";
