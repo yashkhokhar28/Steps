@@ -126,7 +126,7 @@ public IActionResult ProductSave(ProductModel productModel)
 To retrieve the existing product data and display it in the form for editing, update the `ProductAddEdit` method:
 
 ```csharp
-public IActionResult ProductAddEdit(int? ProductID)
+public IActionResult ProductAddEdit(int ProductID)
         {
             string connectionString = this.configuration.GetConnectionString("ConnectionString");
 
