@@ -1,36 +1,38 @@
-# Drop-Down
+# Implementing a Drop-Down in ASP.NET Core MVC
 
-**Prerequisite**: Drop-Down Procedure
+**Prerequisite**: Ensure the Drop-Down Procedure is created in your database.
 
-**Drop-Down Procedure**
+### Drop-Down Procedure
+
+Below is the SQL stored procedure for retrieving user data for the drop-down list:
 
 ```sql
 CREATE PROCEDURE [dbo].[PR_User_DropDown]
 AS
 BEGIN
-SELECT
-[dbo].[User].[UserID],
-[dbo].[User].[UserName]
-FROM
-[dbo].[User]
+    SELECT
+        [dbo].[User].[UserID],
+        [dbo].[User].[UserName]
+    FROM
+        [dbo].[User]
 END
 ```
 
-## Step 1
+## Step 1: Create a Model for the Drop-Down
 
-Create Model For Drop-Down in ProductModel.cs
+In your `ProductModel.cs`, create a model that represents the drop-down data.
 
 ```csharp
 public class UserDropDownModel
 {
-  public int UserID { get; set; }
-  public string UserName { get; set; }
+    public int UserID { get; set; }
+    public string UserName { get; set; }
 }
 ```
 
-## Step 2
+## Step 2: Implement Logic to Fetch Data for the Drop-Down in the Controller
 
-Add a Logic of Getting Data For Drop-Down in ProductAddEdit Page Action method in Controller
+In the `ProductAddEdit` action method, add logic to retrieve the user data for the drop-down list from the database.
 
 ```csharp
 string connectionString = this.configuration.GetConnectionString("ConnectionString");
@@ -45,24 +47,24 @@ dataTable1.Load(reader1);
 List<UserDropDownModel> users = new List<UserDropDownModel>();
 foreach (DataRow dataRow in dataTable1.Rows)
 {
-  UserDropDownModel userDropDownModel = new UserDropDownModel();
- userDropDownModel.UserID = Convert.ToInt32(dataRow["UserID"]);
- userDropDownModel.UserName = dataRow["UserName"].ToString();
- users.Add(userDropDownModel);
+    UserDropDownModel userDropDownModel = new UserDropDownModel();
+    userDropDownModel.UserID = Convert.ToInt32(dataRow["UserID"]);
+    userDropDownModel.UserName = dataRow["UserName"].ToString();
+    users.Add(userDropDownModel);
 }
 ViewBag.UserList = users;
 ```
 
-## Step 3
+## Step 3: Add the Drop-Down in `ProductAddEdit.cshtml`
 
-Add Select Tag in ProductAddEdit.cshtml file For Drop-Down and use asp-items Tag Helper
+In the `ProductAddEdit.cshtml` file, add a `<select>` tag for the drop-down list and use the `asp-items` tag helper to bind the data.
 
 ```csharp
 <select class="form-control" asp-for="UserID" asp-items="@(new SelectList(ViewBag.UserList, "UserID", "UserName"))">
- <option value="">Select User</option>
+    <option value="">Select User</option>
 </select>
 ```
 
-## Step 4
+## Step 4: Test the Drop-Down
 
-Open Add-Edit Page and Check Data Of Drop-Down
+Open the Add-Edit page in your application and verify that the drop-down list is populated with the correct data from the database.
