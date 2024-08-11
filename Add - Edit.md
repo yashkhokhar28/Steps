@@ -127,53 +127,62 @@ To retrieve the existing product data and display it in the form for editing, up
 
 ```csharp
 public IActionResult ProductAddEdit(int? ProductID)
-{
-  string connectionString = this.configuration.GetConnectionString("ConnectionString");
+        {
+            string connectionString = this.configuration.GetConnectionString("ConnectionString");
 
-    SqlConnection connection1 = new SqlConnection(connectionString);
- connection1.Open();
-  SqlCommand command1 = connection1.CreateCommand();
- command1.CommandType = System.Data.CommandType.StoredProcedure;
- command1.CommandText = "PR_User_DropDown";
-  SqlDataReader reader1 = command1.ExecuteReader();
-  DataTable dataTable1 = new DataTable();
- dataTable1.Load(reader1);
- connection1.Close();
+            #region User Drop-Down
 
-  List<UserDropDownModel> users = new List<UserDropDownModel>();
+            SqlConnection connection1 = new SqlConnection(connectionString);
+            connection1.Open();
+            SqlCommand command1 = connection1.CreateCommand();
+            command1.CommandType = System.Data.CommandType.StoredProcedure;
+            command1.CommandText = "PR_User_DropDown";
+            SqlDataReader reader1 = command1.ExecuteReader();
+            DataTable dataTable1 = new DataTable();
+            dataTable1.Load(reader1);
+            connection1.Close();
 
-  foreach (DataRow dataRow in dataTable1.Rows)
- {  UserDropDownModel userDropDownModel = new UserDropDownModel();
- userDropDownModel.UserID = Convert.ToInt32(dataRow["UserID"]);
- userDropDownModel.UserName = dataRow["UserName"].ToString();
- users.Add(userDropDownModel);
- }
-  ViewBag.UserList = users;
+            List<UserDropDownModel> users = new List<UserDropDownModel>();
 
+            foreach (DataRow dataRow in dataTable1.Rows)
+            {
+                UserDropDownModel userDropDownModel = new UserDropDownModel();
+                userDropDownModel.UserID = Convert.ToInt32(dataRow["UserID"]);
+                userDropDownModel.UserName = dataRow["UserName"].ToString();
+                users.Add(userDropDownModel);
+            }
 
-    SqlConnection connection = new SqlConnection(connectionString);
- connection.Open();
-  SqlCommand command = connection.CreateCommand();
- command.CommandType = CommandType.StoredProcedure;
- command.CommandText = "PR_Product_SelectByPK";
- command.Parameters.AddWithValue("@ProductID", ProductID);
-  SqlDataReader reader = command.ExecuteReader();
-  DataTable table = new DataTable();
- table.Load(reader);
-  ProductModel productModel = new ProductModel();
+            ViewBag.UserList = users;
 
-  foreach (DataRow dataRow in table.Rows)
- { productModel.ProductID = Convert.ToInt32(@dataRow["ProductID"]);
- productModel.ProductName = @dataRow["ProductName"].ToString();
- productModel.ProductCode = @dataRow["ProductCode"].ToString();
- productModel.ProductPrice = Convert.ToDouble(@dataRow["ProductPrice"]);
- productModel.Description = @dataRow["Description"].ToString();
- productModel.UserID = Convert.ToInt32(@dataRow["UserID"]);
- }
+            #endregion
 
+            #region ProductByID
 
- return View("ProductAddEdit", productModel);
-}
+            SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "PR_Product_SelectByPK";
+            command.Parameters.AddWithValue("@ProductID", ProductID);
+            SqlDataReader reader = command.ExecuteReader();
+            DataTable table = new DataTable();
+            table.Load(reader);
+            ProductModel productModel = new ProductModel();
+
+            foreach (DataRow dataRow in table.Rows)
+            {
+                productModel.ProductID = Convert.ToInt32(@dataRow["ProductID"]);
+                productModel.ProductName = @dataRow["ProductName"].ToString();
+                productModel.ProductCode = @dataRow["ProductCode"].ToString();
+                productModel.ProductPrice = Convert.ToDouble(@dataRow["ProductPrice"]);
+                productModel.Description = @dataRow["Description"].ToString();
+                productModel.UserID = Convert.ToInt32(@dataRow["UserID"]);
+            }
+
+            #endregion
+
+            return View("ProductAddEdit", productModel);
+        }
 ```
 
 ### Part 2: Update the Product Data in the Database
