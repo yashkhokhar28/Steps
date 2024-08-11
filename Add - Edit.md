@@ -110,7 +110,7 @@ public IActionResult ProductSave(ProductModel productModel)
                 }
 
                 command.ExecuteNonQuery();
-                return View("ProductList");
+                return RedirectToAction("ProductList");
             }
 
             return View("ProductAddEdit", productModel);
