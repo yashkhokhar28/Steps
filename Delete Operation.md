@@ -36,10 +36,13 @@ return RedirectToAction("ProductList");
 
 In the list page, add a delete link/button that calls the `ProductDelete` action method. This link will pass the `ProductID` to the method to identify which product to delete.
 
-```csharp
-<a class="btn btn-outline-danger btn-xs" asp-controller="Product" asp-action="ProductDelete" asp-route-ProductID="@dataRow["ProductID"]">
-    <i class="bi bi-x"></i>
-</a>
+```html
+<form method="post" asp-controller="Product" asp-action="ProductDelete">
+    <input type="hidden" name="ProductID" value="@dataRow["ProductID"]" />
+    <button type="submit" class="btn btn-outline-danger btn-xs">
+        <i class="bi bi-x"></i>
+    </button>
+</form>
 ```
 
 ## Step 3: Test the Delete Operation
