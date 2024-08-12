@@ -21,20 +21,42 @@ END
 Add the following code in your controller to handle the deletion of a product. This method connects to the database, executes the delete procedure, and then redirects to the product list page.
 
 ```csharp
-string connectionString = this.configuration.GetConnectionString("ConnectionString");
-SqlConnection connection = new SqlConnection(connectionString);
-connection.Open();
-SqlCommand command = connection.CreateCommand();
-command.CommandType = CommandType.StoredProcedure;
-command.CommandText = "PR_Product_Delete";
-command.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
-command.ExecuteNonQuery();
-return RedirectToAction("ProductList");
+public IActionResult ProductDelete(int ProductID)
+{
+    try
+    {
+        string connectionString = this._configuration.GetConnectionString("ConnectionString");
+        SqlConnection connection = new SqlConnection(connectionString);
+        connection.Open();
+        SqlCommand command = connection.CreateCommand();
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "PR_Product_Delete";
+        command.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
+        command.ExecuteNonQuery();
+        return RedirectToAction("ProductList");
+    }
+    catch (Exception ex)
+    {
+        TempData["ErrorMessage"] = ex.Message;
+        Console.WriteLine(ex.ToString());
+        return RedirectToAction("ProductList");
+    }
+}
+```
+
+```csharp
+<span class="text-danger">@TempData["ErrorMessage"]</span>
 ```
 
 ## Step 2: Add a Delete Link on the List Page
 
 In the list page, add a delete link/button that calls the `ProductDelete` action method. This link will pass the `ProductID` to the method to identify which product to delete.
+
+```html
+<a class="btn btn-outline-danger btn-xs" asp-controller="Order" asp-action="OrderDelete" asp-route-OrderID="@dataRow["OrderID"]">
+    <i class="bi bi-x"></i>
+</a>
+```
 
 ```html
 <form method="post" asp-controller="Product" asp-action="ProductDelete">
