@@ -31,6 +31,8 @@ public IActionResult ProductDelete(int ProductID)
         SqlCommand command = connection.CreateCommand();
         command.CommandType = CommandType.StoredProcedure;
         command.CommandText = "PR_Product_Delete";
+        command.Parameters.AddWithValue("@ProductID", ProductID);
+        // another way to add parameter
         command.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
         command.ExecuteNonQuery();
         return RedirectToAction("ProductList");
@@ -50,13 +52,30 @@ In the list page, add a delete link/button that calls the `ProductDelete` action
 
 ```html
 <form method="post" asp-controller="Product" asp-action="ProductDelete">
-    <input type="hidden" name="ProductID" value="@dataRow["ProductID"]" />
-    <button type="submit" class="btn btn-outline-danger btn-xs">
-        <i class="bi bi-x"></i>
-    </button>
+  <input type="hidden" name="ProductID" value="@dataRow["ProductID"]" />
+  <button type="submit" class="btn btn-outline-danger btn-xs">
+    <i class="bi bi-x"></i>
+  </button>
 </form>
 ```
+
+Another way to add a delete link is to use an anchor tag with a `href` attribute that points to the `ProductDelete` action method. This method will be called when the user clicks the link.
+
+```html
+<a href="/Product/ProductDelete?ProductID=@dataRow["ProductID"]" class="btn btn-outline-danger btn-xs">
+  <i class="bi bi-x"></i>
+</a>
+
+```
+
+using the `asp-route-` attribute:
+
+```html
+<a asp-controller="Product" asp-action="ProductDelete" asp-route-ProductID="@dataRow["ProductID"]" class="btn btn-outline-danger btn-xs">
+  <i class="bi bi-x"></i>
+</a>
 
 ## Step 3: Test the Delete Operation
 
 Ensure that the delete functionality works by testing it in the application. Check that the product is removed from the database and that the list page updates accordingly.
+```

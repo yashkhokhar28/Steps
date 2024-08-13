@@ -22,11 +22,14 @@ END
 
 In your `OrderModel.cs`, create a model that represents the drop-down data.
 
+create your model where you want to use the drop-down list.
+example: inside productModel create a userDropDownModel
+
 ```csharp
 public class CustomerDropDownModel
 {
     public int CustomerID { get; set; }
-    public int CustomerName { get; set; }
+    public string CustomerName { get; set; }
 }
 ```
 
@@ -45,11 +48,11 @@ SqlDataReader reader1 = command1.ExecuteReader();
 DataTable dataTable1 = new DataTable();
 dataTable1.Load(reader1);
 List<CustomerDropDownModel> customerList = new List<CustomerDropDownModel>();
-foreach (DataRow dataRow in dataTable1.Rows)
+foreach (DataRow data in dataTable1.Rows)
 {
     CustomerDropDownModel customerDropDownModel = new CustomerDropDownModel();
-    userDropDownModel.CustomerID = Convert.ToInt32(dataRow["CustomerID"]);
-    userDropDownModel.CustomerName = dataRow["CustomerName"].ToString();
+    customerDropDownModel.CustomerID = Convert.ToInt32(data["CustomerID"]);
+    customerDropDownModel.CustomerName = data["CustomerName"].ToString();
     customerList.Add(customerDropDownModel);
 }
 ViewBag.CustomerList = customerList;
@@ -65,6 +68,22 @@ In the `OrderAddEdit.cshtml` file, add a `<select>` tag for the drop-down list a
 </select>
 ```
 
+another way to add the drop-down list is to use the `foreach` loop in the view file.
+
+```csharp
+<select class="form-control" asp-for="CustomerID">
+    <option value="">Select Customer</option>
+    @foreach (var customer in ViewBag.CustomerList)
+    {
+        <option value="@customer.CustomerID">@customer.CustomerName</option>
+    }
+</select>
+```
+
 ## Step 4: Test the Drop-Down
 
 Open the Add-Edit page in your application and verify that the drop-down list is populated with the correct data from the database.
+
+```
+
+```
