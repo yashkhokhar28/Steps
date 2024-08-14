@@ -31,18 +31,15 @@ public IActionResult ProductDelete(int ProductID)
         SqlCommand command = connection.CreateCommand();
         command.CommandType = CommandType.StoredProcedure;
         command.CommandText = "PR_Product_Delete";
-        command.Parameters.AddWithValue("@ProductID", ProductID);
-        // another way to add parameter
         command.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
         command.ExecuteNonQuery();
-        return RedirectToAction("ProductList");
     }
     catch (Exception ex)
     {
         TempData["ErrorMessage"] = ex.Message;
         Console.WriteLine(ex.ToString());
-        return RedirectToAction("ProductList");
     }
+    return RedirectToAction("ProductList");
 }
 ```
 
