@@ -71,8 +71,8 @@ using the `asp-route-` attribute:
 <a asp-controller="Product" asp-action="ProductDelete" asp-route-ProductID="@dataRow["ProductID"]" class="btn btn-outline-danger btn-xs">
   <i class="bi bi-x"></i>
 </a>
+```
 
 ## Step 3: Test the Delete Operation
 
 Ensure that the delete functionality works by testing it in the application. Check that the product is removed from the database and that the list page updates accordingly.
-```
