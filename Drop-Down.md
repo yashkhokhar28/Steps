@@ -20,7 +20,7 @@ END
 
 ## Step 1: Create a Model for the Drop-Down
 
-In your `OrderModel.cs`, create a model that represents the drop-down data.
+In your `UserModel.cs`, create a model that represents the drop-down data.
 
 
 example: inside UserModel create a UserDropDownModel
