@@ -75,4 +75,8 @@ using the `asp-route-` attribute:
 
 ## Step 3: Test the Delete Operation
 
+Display Error Message in View Page
+```csharp
+<span class="text-danger">@TempData["ErrorMessage"]</span>
+```
 Ensure that the delete functionality works by testing it in the application. Check that the product is removed from the database and that the list page updates accordingly.
