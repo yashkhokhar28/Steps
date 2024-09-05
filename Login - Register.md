@@ -35,7 +35,7 @@ END
 GO
 CREATE PROCEDURE [dbo].[PR_User_Register]
     @UserName NVARCHAR(50),
-    @Password NVARCHAR(50)
+    @Password NVARCHAR(50),
     @Email NVARCHAR(500),
     @MobileNo VARCHAR(50),
     @Address VARCHAR(50)
