@@ -32,7 +32,6 @@ END
 ### Stored Procedure Code:
 
 ```sql
-GO
 CREATE PROCEDURE [dbo].[PR_User_Register]
     @UserName NVARCHAR(50),
     @Password NVARCHAR(50),
@@ -57,6 +56,7 @@ BEGIN
         @MobileNo,
         @Address
     );
+END
 ```
 
 ## Step 1: Layout Setup in `_LoginLayout.cshtml`
