@@ -287,8 +287,37 @@ public class CheckAccess : ActionFilterAttribute, IAuthorizationFilter
 }
 ```
 
+## Step 7: Add Method For Accessing UserName,Address From Session in  `CommonVariable.cs`
+To restrict access based on the session, implement `CheckAccess` to ensure that a user cannot access pages without logging in.
 
-## Step 7: **Configure Session in Startup.cs or Program.cs**
+### Code:
+
+```csharp
+public static class CommonVariable  
+{  
+  private static IHttpContextAccessor _httpContextAccessor;  
+  
+  static CommonVariable()  
+ {  _httpContextAccessor = new HttpContextAccessor();  
+ }  
+  public static int? UserID()  
+ {  int? UserID = null;  
+  if (_httpContextAccessor.HttpContext.Session.GetString("UserID") != null)  
+ { UserID =  Convert.ToInt32(_httpContextAccessor.HttpContext.Session.GetString("UserID").ToString());  
+ }  
+  return UserID;  
+ }  
+  public static string? UserName()  
+ {  string? UserName = null;  
+  if (_httpContextAccessor.HttpContext.Session.GetString("UserName") != null)  
+ { UserName =  _httpContextAccessor.HttpContext.Session.GetString("UserName").ToString();  
+ }  
+  return UserName;  
+ }}
+```
+
+
+## Step 8: **Configure Session in Startup.cs or Program.cs**
 **In Program.cs (for ASP.NET Core 6.0 or later)**
 
 If you are using ASP.NET Core 6.0 or later, the configuration is done in Program.cs.
