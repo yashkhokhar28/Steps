@@ -1,3 +1,4 @@
+
 # Implementing Login Functionality in ASP.NET Core
 
 ## Prerequisite
@@ -185,42 +186,65 @@ Set up your login page to accept the username and password. Use `asp-for` to bin
 
 ```html
 @{
-    Layout = "_LoginLayout";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
 }
-@model UserLoginModel
 
-<div class="container-login100">
-    <div class="wrap-login100">
-        <div class="login100-form-title" style="background-image: url('~/Login/images/bg-01.jpg');">
-            <span class="login100-form-title-1">Sign In</span>
+@model CoffeeShop.Models.UserLoginModel
+
+<main class="main" id="main">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+                    <div class="card mb-3">
+
+                        <div class="card-body">
+
+                            <div class="pt-4 pb-2">
+                                <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                                @if (TempData["ErrorMessage"] != null)
+                                {
+                                    <div class="text-danger">@Html.Raw(TempData["Error"]) </div>
+                                }
+                                <p class="text-center small">Enter your username & password to login</p>
+                            </div>
+
+                            <form class="row g-3 needs-validation" asp-action="Login" asp-controller="User">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="col-12">
+                                    <label for="yourUsername" class="form-label">Username</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupPrepend"></span>
+                                        <input type="text" class="form-control" asp-for="UserName" id="yourUsername">
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="yourPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" asp-for="Password" id="yourPassword">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100" type="submit">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        @if(TempData["ErrorMessage"] != null)
-        {
-            <div class="text-danger">
-                @Html.Raw(TempData["ErrorMessage"])
-            </div>
-        }
-        
-        <form class="login100-form validate-form" asp-action="Login">
-            <div class="wrap-input100" data-validate="Username is required">
-                <span class="label-input100">Username</span>
-                <input class="input100" type="text" asp-for="UserName" placeholder="Enter username">
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
 
-            <div class="wrap-input100" data-validate="Password is required">
-                <span class="label-input100">Password</span>
-                <input class="input100" type="password" asp-for="Password" placeholder="Enter password">
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+    </section>
+</main>
 
-            <div class="container-login100-form-btn">
-                <button type="submit" class="login100-form-btn">Login</button>
-            </div>
-        </form>
-    </div>
-</div>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 ```
 
 ## Step 5: Implement Logout in `SEC_UserController.cs`
@@ -233,7 +257,7 @@ Create an action to clear the session when the user logs out.
 public IActionResult Logout()
 {
     HttpContext.Session.Clear();
-    return RedirectToAction("Login");
+    return RedirectToAction("Login", "User");
 }
 ```
 
@@ -262,3 +286,57 @@ public class CheckAccess : ActionFilterAttribute, IAuthorizationFilter
     }
 }
 ```
+
+
+## Step 7: **Configure Session in Startup.cs or Program.cs**
+**In Program.cs (for ASP.NET Core 6.0 or later)**
+
+If you are using ASP.NET Core 6.0 or later, the configuration is done in Program.cs.
+
+1. **Add Session Services:**
+
+Add session configuration inside the builder.Services section.
+
+### Code:
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Secure the session cookie
+    options.Cookie.IsEssential = true; // Ensure cookie is essential
+});
+
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+```
+
+**Enable Session in the Pipeline:**
+
+After configuring the services, make sure the session middleware is enabled in the request pipeline.
+
+```csharp
+// Enable session middleware
+app.UseSession(); // Must be added before app.MapControllerRoute
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+// enables the authentication middleware in ASP.NET Core to handle user authentication for securing endpoints.​
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+```
+
