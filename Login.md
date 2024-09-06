@@ -28,7 +28,7 @@ BEGIN
 END
 ```
 
-## Step 1: Layout Setup in `_LoginLayout.cshtml`
+## Step 1: Layout Setup in `_Layout_Login.cshtml`
 Ensure that your layout file includes the necessary CSS and JS libraries to support the login page.
 
 ### Code:
