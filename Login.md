@@ -239,7 +239,7 @@ Set up your login page to accept the username and password. Use `asp-for` to bin
 }
 ```
 
-## Step 5: Implement Logout in `SEC_UserController.cs`
+## Step 5: Implement Logout in `UserController.cs`
 Create an action to clear the session when the user logs out.
 
 ### Code:
@@ -330,10 +330,7 @@ public class CommonVariable
 ```
 
 
-## Step 8: **Configure Session in Startup.cs or Program.cs**
-**In Program.cs (for ASP.NET Core 6.0 or later)**
-
-If you are using ASP.NET Core 6.0 or later, the configuration is done in Program.cs.
+## Step 8: **Configure Session in Program.cs**
 
 1. **Add Session Services:**
 
