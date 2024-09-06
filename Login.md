@@ -28,38 +28,6 @@ BEGIN
 END
 ```
 
-- **Stored Procedure: `PR_User_Register`**
-
-### Stored Procedure Code:
-
-```sql
-CREATE PROCEDURE [dbo].[PR_User_Register]
-    @UserName NVARCHAR(50),
-    @Password NVARCHAR(50),
-    @Email NVARCHAR(500),
-    @MobileNo VARCHAR(50),
-    @Address VARCHAR(50)
-AS
-BEGIN
-    INSERT INTO [dbo].[User]
-    (
-        [UserName],
-        [Password],
-        [Email],
-        [MobileNo],
-        [Address]
-    )
-    VALUES
-    (
-        @UserName,
-        @Password,
-        @Email,
-        @MobileNo,
-        @Address
-    );
-END
-```
-
 ## Step 1: Layout Setup in `_LoginLayout.cshtml`
 Ensure that your layout file includes the necessary CSS and JS libraries to support the login page.
 
