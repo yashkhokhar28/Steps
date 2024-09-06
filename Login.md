@@ -191,54 +191,78 @@ Set up your login page to accept the username and password. Use `asp-for` to bin
 
 @model CoffeeShop.Models.UserLoginModel
 
-<main class="main" id="main">
-    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+<main>
+    <div class="container">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-                    <div class="card mb-3">
+                        <div class="d-flex justify-content-center py-4">
+                            <a class="logo d-flex align-items-center w-auto">
+                                <img src="~/img/logo.png" alt="">
+                                <span class="d-none d-lg-block">NiceAdmin</span>
+                            </a>
+                        </div><!-- End Logo -->
 
-                        <div class="card-body">
+                        <div class="card mb-3">
 
-                            <div class="pt-4 pb-2">
-                                <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                @if (TempData["ErrorMessage"] != null)
-                                {
-                                    <div class="text-danger">@Html.Raw(TempData["Error"]) </div>
-                                }
-                                <p class="text-center small">Enter your username & password to login</p>
-                            </div>
+                            <div class="card-body">
 
-                            <form class="row g-3 needs-validation" asp-action="Login" asp-controller="User">
-                                <div asp-validation-summary="All" class="text-danger"></div>
-                                <div class="col-12">
-                                    <label for="yourUsername" class="form-label">Username</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text" id="inputGroupPrepend"></span>
-                                        <input type="text" class="form-control" asp-for="UserName" id="yourUsername">
-                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                <div class="pt-4 pb-2">
+                                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                                    <p class="text-center small">Enter your username & password to login</p>
+                                </div>
+
+                                <form class="row g-3 needs-validation" asp-action="UserLogin" asp-controller="User">
+
+                                    <div class="col-12">
+                                        <label for="yourUsername" class="form-label">Username</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text" id="inputGroupPrepend"></span>
+                                            <input type="text" asp-for="UserName" class="form-control" id="yourUsername">
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-12">
-                                    <label for="yourPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" asp-for="Password" id="yourPassword">
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                </div>
+                                    <div class="col-12">
+                                        <label for="yourPassword" class="form-label">Password</label>
+                                        <input type="password" asp-for="Password" class="form-control" id="yourPassword">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
 
-                                <div class="col-12">
-                                    <button class="btn btn-primary w-100" type="submit">Login</button>
-                                </div>
-                            </form>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                                            <label class="form-check-label" for="rememberMe">Remember me</label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100" type="submit">Login</button>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="small mb-0">Don't have account? <a>Create an account</a></p>
+                                    </div>
+                                </form>
+
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
 
-    </section>
-</main>
+        </section>
+
+    </div>
+</main><!-- End #main -->
 
 @section Scripts{
     @{
@@ -293,27 +317,48 @@ To restrict access based on the session, implement `CheckAccess` to ensure that 
 ### Code:
 
 ```csharp
-public static class CommonVariable  
-{  
-  private static IHttpContextAccessor _httpContextAccessor;  
-  
-  static CommonVariable()  
- {  _httpContextAccessor = new HttpContextAccessor();  
- }  
-  public static int? UserID()  
- {  int? UserID = null;  
-  if (_httpContextAccessor.HttpContext.Session.GetString("UserID") != null)  
- { UserID =  Convert.ToInt32(_httpContextAccessor.HttpContext.Session.GetString("UserID").ToString());  
- }  
-  return UserID;  
- }  
-  public static string? UserName()  
- {  string? UserName = null;  
-  if (_httpContextAccessor.HttpContext.Session.GetString("UserName") != null)  
- { UserName =  _httpContextAccessor.HttpContext.Session.GetString("UserName").ToString();  
- }  
-  return UserName;  
- }}
+namespace CoffeeShop.BAL;
+
+public class CommonVariable
+{
+    private static IHttpContextAccessor _HttpContextAccessor;
+
+    static CommonVariable()
+    {
+        _HttpContextAccessor = new HttpContextAccessor();
+    }
+
+
+    public static int? UserID()
+    {
+        
+        if (_HttpContextAccessor.HttpContext.Session.GetString("UserID") == null)
+        {
+            return null;
+        }
+
+        return Convert.ToInt32(_HttpContextAccessor.HttpContext.Session.GetString("UserID"));
+    }
+
+    public static string UserName()
+    {
+        if (_HttpContextAccessor.HttpContext.Session.GetString("UserName") == null)
+        {
+            return null;
+        }
+
+        return _HttpContextAccessor.HttpContext.Session.GetString("UserName");
+    }
+
+    public static string Email()
+    {
+        if (_HttpContextAccessor.HttpContext.Session.GetString("EmailAddress") == null)
+        {
+            return null;
+        }
+        return _HttpContextAccessor.HttpContext.Session.GetString("EmailAddress");
+    }
+}
 ```
 
 
@@ -331,10 +376,10 @@ Add session configuration inside the builder.Services section.
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Login 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews();
 
