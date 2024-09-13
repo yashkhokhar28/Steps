@@ -112,7 +112,7 @@ Handle the login process in the `UserController`. It uses the stored procedure `
 ### Code:
 
 ```csharp
-public IActionResult Login(UserLoginModel userLoginModel)
+public IActionResult UserLogin(UserLoginModel userLoginModel)
     {
         try
         {
@@ -255,6 +255,7 @@ public IActionResult Logout()
 
 ## Step 6: Add Session and Authorization Logic with `CheckAccess.cs`
 To restrict access based on the session, implement `CheckAccess` to ensure that a user cannot access pages without logging in.
+(Create this file on prject level)
 
 ### Code:
 
@@ -279,13 +280,23 @@ public class CheckAccess : ActionFilterAttribute, IAuthorizationFilter
 }
 ```
 
+```csharp
+[CheckAccess]
+public class HomeController : Controller
+{
+  // Rest of code for controller
+}
+```
+
+If you place `[CheckAccess]` on a controller like HomeController, every action in that controller will run through the CheckAccess authorization logic.
+If you place `[CheckAccess]` on individual action methods, only those specific methods will use the custom authorization logic.
+
 ## Step 7: Add Method For Accessing UserName,Address From Session in  `CommonVariable.cs`
-To restrict access based on the session, implement `CheckAccess` to ensure that a user cannot access pages without logging in.
+(Create this file on prject level)
 
 ### Code:
 
 ```csharp
-namespace CoffeeShop.BAL;
 
 public class CommonVariable
 {
