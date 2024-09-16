@@ -245,7 +245,6 @@ Create an action to clear the session when the user logs out.
 ### Code:
 
 ```csharp
-[HttpPost]
 public IActionResult Logout()
 {
     HttpContext.Session.Clear();
