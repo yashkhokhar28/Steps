@@ -266,7 +266,7 @@ public class CheckAccess : ActionFilterAttribute, IAuthorizationFilter
     {
         if (filterContext.HttpContext.Session.GetString("UserID") == null)
         {
-            filterContext.Result = new RedirectResult("~/SEC_User/Login");
+            filterContext.Result = new RedirectResult("~/User/Login");
         }
     }
 
