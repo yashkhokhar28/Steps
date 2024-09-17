@@ -113,22 +113,24 @@ Handle the login process in the `UserController`. It uses the stored procedure `
 
 ```csharp
 public IActionResult UserLogin(UserLoginModel userLoginModel)
+{
+    try
     {
-        try
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            string connectionString = this.configuration.GetConnectionString("ConnectionString");
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.Open();
+            SqlCommand sqlCommand = sqlConnection.CreateCommand();
+            sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            sqlCommand.CommandText = "PR_User_Login";
+            sqlCommand.Parameters.Add("@UserName", SqlDbType.VarChar).Value = userLoginModel.UserName;
+            sqlCommand.Parameters.Add("@Password", SqlDbType.VarChar).Value = userLoginModel.Password;
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            DataTable dataTable = new DataTable();
+            dataTable.Load(sqlDataReader);
+            if (dataTable.Rows.Count > 0)
             {
-                string connectionString = this.configuration.GetConnectionString("ConnectionString");
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-                SqlCommand sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.CommandText = "PR_User_Login";
-                sqlCommand.Parameters.Add("@UserName", SqlDbType.VarChar).Value = userLoginModel.UserName;
-                sqlCommand.Parameters.Add("@Password", SqlDbType.VarChar).Value = userLoginModel.Password;
-                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                DataTable dataTable = new DataTable();
-                dataTable.Load(sqlDataReader);
                 foreach (DataRow dr in dataTable.Rows)
                 {
                     HttpContext.Session.SetString("UserID", dr["UserID"].ToString());
@@ -137,14 +139,20 @@ public IActionResult UserLogin(UserLoginModel userLoginModel)
 
                 return RedirectToAction("ProductList", "Product");
             }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+            
         }
-        catch (Exception e)
-        {
-            TempData["ErrorMessage"] = e.Message;
-        }
-
-        return RedirectToAction("Login");
     }
+    catch (Exception e)
+    {
+        TempData["ErrorMessage"] = e.Message;
+    }
+
+    return RedirectToAction("Login");
+}
 ```
 
 ## Step 3: Create the Login Page (`Login.cshtml`)
